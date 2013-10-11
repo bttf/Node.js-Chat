@@ -1,37 +1,27 @@
-//	Customization
-
-var appPort = 16558;
-
-// Librairies
-
+var appPort = 8000;
 var express = require('express'), app = express();
 var http = require('http')
   , server = http.createServer(app)
   , io = require('socket.io').listen(server);
+// var jade = require('jade');
+var engines = require('consolidate');
 
-
-var jade = require('jade');
-// var io = require('socket.io').listen(app);
 var pseudoArray = ['admin']; //block the admin username (you can disable it)
 
-// Views Options
-
 app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
+app.engine('html', engines.mustache);
+app.set('view engine', 'html');
 app.set("view options", { layout: false })
-
 app.configure(function() {
 	app.use(express.static(__dirname + '/public'));
 });
 
-// Render and send the main page
-
 app.get('/', function(req, res){
-  res.render('home.jade');
+  res.render('home.html');
 });
+
 server.listen(appPort);
-// app.listen(appPort);
-console.log("Server listening on port 16558");
+console.log("Server listening on port " + appPort);
 
 // Handle the socket.io connections
 
